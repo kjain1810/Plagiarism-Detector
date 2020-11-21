@@ -1,3 +1,5 @@
+import os.path
+
 from model.model import initialize_model, usercall, userresult
 
 while True:
@@ -16,24 +18,26 @@ while True:
     elif mode == 3:
         print("Enter custom threshhold: ", end="")
         custom_threshhold = float(input())
-        initialize_model(modeltype="custon", custom=custom_threshhold)
+        initialize_model(modeltype="custom", custom=custom_threshhold)
         break
     else:
         print("Invalid choice")
 
 print("Original filepath to test against: ", end="")
 original_file = input()
-original_vector = usercall(original_file)
 
-while original_vector == None:
+while os.path.isfile(original_file) == False:
     print("Invalid file, try again: ", end="")
     original_file = input()
+
+original_vector, _ = usercall(original_file)
 
 while True:
     print("Enter file path: ", end="")
     test_file = input()
-    test_vector = usercall(test_file)
-    if test_vector != None:
+    if os.path.isfile(test_file) != False:
+        test_vector, _ = usercall(test_file)
+        print(test_vector)
         isPlag = userresult(original_vector, test_vector)
         if isPlag == True:
             print("File is plagiarized!")

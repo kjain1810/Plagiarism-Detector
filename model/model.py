@@ -14,12 +14,11 @@ from nltk.tokenize import word_tokenize
 
 import os
 
-STOPWORDS = None
-word2vec = None
-threshhold = None
-
 
 def initialize_model(modeltype, custom=None):
+    global STOPWORDS
+    global word2vec
+    global threshhold
     STOPWORDS = stopwords.words('english')
     glovepath = os.path.abspath(os.getcwd())
     glovepath += "/model/glove.6B.100d.txt"
@@ -28,19 +27,19 @@ def initialize_model(modeltype, custom=None):
     glove2word2vec(glove_file, word2vec_glove_file)
     word2vec = KeyedVectors.load_word2vec_format(word2vec_glove_file)
     if modeltype == "accuracy":
-        threshhold = 2.4572000000008547
+        threshhold = 2.2787000000004447
     elif modeltype == "f_score":
-        threshhold = 5.920599999999634
+        threshhold = 5.640400000000254
     else:
         threshhold = custom
 
 
 def getdata(filepath):
     if os.path.isfile(filepath) == False:
-        print("File does not exist!")
         return None
     reader = open(filepath, "r")
     data = reader.read()
+    reader.close()
     return data
 
 
@@ -49,13 +48,14 @@ def gettokens(data):
     words = [re.sub(r'[^\w\s]', ' ', word) for word in trimmedwords]
     ans = [y for x in words for y in word_tokenize(x)]
     valid_token = []
+    word_thrown = []
     for i in range(len(ans)):
         ans[i] = ans[i].lower()
-        if ans[i] in word2vec.vocab:
+        if ans[i] in word2vec.vocab and ans[i] not in STOPWORDS:
             valid_token.append(ans[i])
         else:
-            print("Throwing " + ans[i] + " from the file")
-    return valid_token
+            word_thrown.append(ans[i])
+    return valid_token, word_thrown
 
 
 def getmeanvector(tokens):
@@ -77,7 +77,7 @@ def getdistance(vec1, vec2):
 
 
 def getresult(distance):
-    if distance >= threshhold:
+    if distance <= threshhold:
         return True
     return False
 
@@ -86,11 +86,31 @@ def usercall(filepath):
     data = getdata(filepath)
     if data == None:
         return None
-    tokens = gettokens(data)
+    tokens, words_thrown = gettokens(data)
     meanvector = getmeanvector(tokens)
-    return meanvector
+    return meanvector, words_thrown
 
 
 def userresult(vec1, vec2):
     distance = getdistance(vec1, vec2)
+    print("Distance: " + str(distance))
     return getresult(distance)
+
+
+# if __name__ == "__main__":
+#     initialize_model(modeltype="accuracy")
+#     tasks = ['a', 'b', 'c', 'd', 'e']
+#     groups = [0, 1, 2, 3, 4]
+#     user = ['A', 'B', 'C', 'D', 'E']
+#     for i in tasks:
+#         orig_name = "orig_task" + i + ".txt"
+#         orig_path = "corpus-20090418/" + orig_name
+#         orig_vector = usercall(filepath=orig_path)
+#         for j in groups:
+#             for k in user:
+#                 testfile_name = "g" + str(j) + "p" + k + "_task" + i + ".txt"
+#                 test_path = "corpus-20090418/" + testfile_name
+#                 if os.path.isfile(test_path):
+#                     test_vector = usercall(filepath=test_path)
+#                     print(testfile_name + ": ")
+#                     dist = userresult(orig_vector, test_vector)
