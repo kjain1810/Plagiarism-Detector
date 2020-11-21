@@ -12,7 +12,7 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
-import os.path
+import os
 
 STOPWORDS = None
 word2vec = None
@@ -21,14 +21,16 @@ threshhold = None
 
 def initialize_model(modeltype, custom=None):
     STOPWORDS = stopwords.words('english')
-    glove_file = datapath('./glove.6B.100d.txt')
+    glovepath = os.path.abspath(os.getcwd())
+    glovepath += "/model/glove.6B.100d.txt"
+    glove_file = datapath(glovepath)
     word2vec_glove_file = get_tmpfile("glove.6B.100d.word2vec.txt")
     glove2word2vec(glove_file, word2vec_glove_file)
     word2vec = KeyedVectors.load_word2vec_format(word2vec_glove_file)
     if modeltype == "accuracy":
-        threshhold = 1.9653999999998937
+        threshhold = 2.4572000000008547
     elif modeltype == "f_score":
-        threshhold = 5.977099999999503
+        threshhold = 5.920599999999634
     else:
         threshhold = custom
 
@@ -43,8 +45,9 @@ def getdata(filepath):
 
 
 def gettokens(data):
-    ret_removed_punc = re.sub(r'[^\w\s]', ' ', data)
-    ans = word_tokenize(ret_removed_punc)
+    trimmedwords = word_tokenize(data)
+    words = [re.sub(r'[^\w\s]', ' ', word) for word in trimmedwords]
+    ans = [y for x in words for y in word_tokenize(x)]
     valid_token = []
     for i in range(len(ans)):
         ans[i] = ans[i].lower()
@@ -56,7 +59,15 @@ def gettokens(data):
 
 
 def getmeanvector(tokens):
-    vec = np.mean([word2vec[word] for word in tokens], axis=0)
+    freq = {}
+    for token in tokens:
+        if token in freq.keys():
+            freq[token] += 1
+        else:
+            freq[token] = 1
+    a = 0.001
+    vec = np.mean([word2vec[word] * (a / (a + freq[word]))
+                   for word in tokens], axis=0)
     return vec
 
 

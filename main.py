@@ -8,13 +8,16 @@ while True:
     print("Choose: ", end="")
     mode = int(input())
     if mode == 1:
-        initialize_model(type="accuracy")
+        initialize_model(modeltype="accuracy")
+        break
     elif mode == 2:
-        initialize_model(type="f_score")
+        initialize_model(modeltype="f_score")
+        break
     elif mode == 3:
         print("Enter custom threshhold: ", end="")
         custom_threshhold = float(input())
-        initialize_model(type="custon", custom=custom_threshhold)
+        initialize_model(modeltype="custon", custom=custom_threshhold)
+        break
     else:
         print("Invalid choice")
 
