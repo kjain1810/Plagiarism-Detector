@@ -16,20 +16,27 @@ import os.path
 
 STOPWORDS = None
 word2vec = None
+threshhold = None
 
 
-def initialize_model():
+def initialize_model(modeltype, custom=None):
     STOPWORDS = stopwords.words('english')
     glove_file = datapath('./glove.6B.100d.txt')
     word2vec_glove_file = get_tmpfile("glove.6B.100d.word2vec.txt")
     glove2word2vec(glove_file, word2vec_glove_file)
     word2vec = KeyedVectors.load_word2vec_format(word2vec_glove_file)
+    if modeltype == "accuracy":
+        threshhold = 1.9653999999998937
+    elif modeltype == "f_score":
+        threshhold = 5.977099999999503
+    else:
+        threshhold = custom
 
 
 def getdata(filepath):
     if os.path.isfile(filepath) == False:
         print("File does not exist!")
-        return
+        return None
     reader = open(filepath, "r")
     data = reader.read()
     return data
@@ -58,7 +65,21 @@ def getdistance(vec1, vec2):
     return cosine * 100
 
 
-def getresult(distance, threshhold=1.0):
+def getresult(distance):
     if distance >= threshhold:
         return True
     return False
+
+
+def usercall(filepath):
+    data = getdata(filepath)
+    if data == None:
+        return None
+    tokens = gettokens(data)
+    meanvector = getmeanvector(tokens)
+    return meanvector
+
+
+def userresult(vec1, vec2):
+    distance = getdistance(vec1, vec2)
+    return getresult(distance)
