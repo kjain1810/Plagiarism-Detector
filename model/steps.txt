@@ -1,0 +1,7 @@
+we are getting 1 original document and 1 essay
+
+2. convert both into lowercase
+3. find common words in original
+4. remove common words and stopwords from both
+5. find mean of word embeddings of processed sentence
+6. find cosine distance
