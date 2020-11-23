@@ -50,13 +50,7 @@ def upload_files():
                 valid_files.append(secure_filename(file.filename))
         if len(valid_files) <= 2:
             return "Upload atleast 2 valid files"
-        ret = "<b>Valid files:</b><br><ol>"
-        for file in valid_files:
-            ret += "<li>"
-            ret += file
-            ret += "<br>"
-        ret += "</ol><br>"
-        ret += "<b>Results</b><br><ol>"
+        ret = []
         for file1 in valid_files:
             for file2 in valid_files:
                 if file1 == file2:
@@ -64,13 +58,15 @@ def upload_files():
                 file1path = "files/" + file1
                 file2path = "files/" + file2
                 res = calcforuser(file1path, file2path)
-                ret += "<li>" + file1 + ", " + file2 + ": "
                 if res:
-                    ret += "Plagiarized"
+                    ret.append(
+                        {'file1': file1, 'file2': file2, 'res': 'Plagiarized'})
                 else:
-                    ret += "Not plagiarized"
-                ret += "</li>"
-        return ret
+                    ret.append(
+                        {'file1': file1, 'file2': file2, 'res': 'Not plagiarized'})
+        for file in valid_files:
+            os.remove("files/" + file)
+        return render_template('results.html', valid_files=valid_files, res=ret)
     else:
         return "No files sent!"
 

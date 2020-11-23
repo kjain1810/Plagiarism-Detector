@@ -1,10 +1,30 @@
 <html>
-
+    <head>
+        <title>
+            TPlag | Upload files
+        </title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <style>
+            .center {
+                margin: 0;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                -ms-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+            }
+        </style>
+    </head>
     <body>
+
         <form action="http://localhost:5000/uploader" method="POST" enctype="multipart/form-data">
-            <input type="file" name="file[]" multiple="">
-            <input type="submit"/>
+            <div class="form-group center">
+                <input type="file" name="file[]" multiple="" class="form-control-file">
+                <br>
+                <input type="submit" class="btn btn-primary"/>
+            </div>
         </form>
+
     </body>
 
 </html>

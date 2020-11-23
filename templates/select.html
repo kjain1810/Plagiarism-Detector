@@ -1,13 +1,40 @@
 <html>
+    <head>
+        <title>
+            TPlag | Detection Mode
+        </title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <style>
+            .center {
+                margin: 0;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                -ms-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+            }
+        </style>
+    </head>
     <body>
-        <form action="/upload" method="POST">
-            <select name="mode">
-                <option value="accuracy">Accuracy</option>
-                <option value="f_score">F score</option>
-            </select>
-            <button>
-                Select
-            </button>
+
+
+        <form action="/upload" method="POST" id="modechooser">
+            <div class="form-group center">
+                <center>
+                    <label for="modechooser">Choose mode</label>
+                </center>
+                <select name="mode" class="form-control">
+                    <option value="accuracy">Accuracy</option>
+                    <option value="f_score">F score</option>
+                </select>
+                <br>
+                <center>
+                    <button class="btn btn-primary" type="submit">
+                        Select
+                    </button>
+                </center>
+            </div>
         </form>
+
     </body>
 </html>
