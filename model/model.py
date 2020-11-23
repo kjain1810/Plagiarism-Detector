@@ -93,24 +93,11 @@ def usercall(filepath):
 
 def userresult(vec1, vec2):
     distance = getdistance(vec1, vec2)
-    print("Distance: " + str(distance))
     return getresult(distance)
 
 
-# if __name__ == "__main__":
-#     initialize_model(modeltype="accuracy")
-#     tasks = ['a', 'b', 'c', 'd', 'e']
-#     groups = [0, 1, 2, 3, 4]
-#     user = ['A', 'B', 'C', 'D', 'E']
-#     for i in tasks:
-#         orig_name = "orig_task" + i + ".txt"
-#         orig_path = "corpus-20090418/" + orig_name
-#         orig_vector = usercall(filepath=orig_path)
-#         for j in groups:
-#             for k in user:
-#                 testfile_name = "g" + str(j) + "p" + k + "_task" + i + ".txt"
-#                 test_path = "corpus-20090418/" + testfile_name
-#                 if os.path.isfile(test_path):
-#                     test_vector = usercall(filepath=test_path)
-#                     print(testfile_name + ": ")
-#                     dist = userresult(orig_vector, test_vector)
+def calcforuser(file1, file2):
+    vec1, _ = usercall(file1)
+    vec2, _ = usercall(file2)
+    res = userresult(vec1, vec2)
+    return res
