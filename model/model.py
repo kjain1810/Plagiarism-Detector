@@ -32,6 +32,7 @@ def initialize_model(modeltype, custom=None):
         threshhold = 5.640400000000254
     else:
         threshhold = custom
+    print("Model initialized")
 
 
 def getdata(filepath):
