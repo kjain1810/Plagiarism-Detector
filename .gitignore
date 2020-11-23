@@ -2,3 +2,4 @@ result.csv
 model/__pycache__
 __pycache__/
 files/*
+model/glove.6B.100d.txt
