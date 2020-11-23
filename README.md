@@ -6,7 +6,7 @@ TPlag uses NLP techniques to detect plagiarism is text files. It can be used to 
 
 The app can be used as a command line interface or a web interface.
 
-The web interface supports uploading multiple files and a pair-wise plagiarism check for all the files. This is the recommended method for testing plagiarism in exams with large number of answers.
+The web interface supports uploading multiple files and a pair-wise plagiarism check for all the files. You can choose whether you want to classify files on basis of optimizing the F score or optimizing the accuracy. This is the recommended method for testing plagiarism in exams with large number of answers.
 
 Meanwhile, the command line interface is recommended for exploratory purposes. It provides an option to optimizes either the F score (threshold around 5.64) of the classifications or the accuracy(threshold around 2.27) or provide a custom threshold!
 
@@ -25,6 +25,8 @@ pip3 install -r <requirements.txt
 Then, run the server using:
 
 ```bash
+rm -rf files
+mkdir files
 export FLASK_APP=main.py
 # uncommend following line to run the server in debug mode
 # export FLASK_ENV=development
