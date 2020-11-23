@@ -1,7 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import scipy
-import pandas as pd
 import re
 
 from gensim.test.utils import datapath, get_tmpfile
