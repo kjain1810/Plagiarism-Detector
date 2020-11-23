@@ -1,13 +1,12 @@
 import os
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from werkzeug.utils import secure_filename
 
 from model.model import initialize_model, calcforuser
 
 
 def createApp():
-    initialize_model(modeltype="accuracy")
     return Flask(__name__)
 
 
@@ -23,8 +22,17 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@app.route('/upload')
+@app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
+    if request.method == 'POST':
+        mode = request.form.get('mode')
+        if mode == 'accuracy':
+            print("Starting accuracy")
+            initialize_model('accuracy')
+        else:
+            print("Starting f score")
+            initialize_model('f_score')
+        initialized = 1
     return render_template('upload.html')
 
 
@@ -63,6 +71,13 @@ def upload_files():
                     ret += "Not plagiarized"
                 ret += "</li>"
         return ret
+    else:
+        return "No files sent!"
+
+
+@app.route("/")
+def select_type():
+    return render_template('select.html')
 
 
 if __name__ == '__main__':
